@@ -2,7 +2,32 @@
 #{set title:'Register' /}
 
 #{set 'moreScripts'}
-    <script>
+
+<script>
+    
+	 function generar_captcha() {
+		var valor=Math.floor(Math.random()*8999)+1000;
+		document.getElementById('captcha').value=valor;
+
+
+	}
+
+	 function comprobar_captcha(captcha_usuario) {
+		var captcha_pagina=document.getElementById('captcha').value;
+		var error = document.getElementById('error_captcha');
+		if (captcha_pagina!=captcha_usuario) {
+		error.innerHTML="Captcha incorrect";
+		document.getElementById("captcha1").style.border="1px solid #FF0000";
+		return false;
+		}
+        else {
+		error.innerHTML="";
+		document.getElementById("captcha1").style.border="1px solid #00FF00";
+		return true;
+		}
+	}
+    
+<script>
     $(document).ready(function(){
 
         $('#register-submit').click(function(){
@@ -36,6 +61,28 @@
                 alert("Both passwords should be the same");
                 return false;
             }
+             var marcado=false;
+            for ( var i = 0; i < form.type.length; i++ ) {
+            if (form.type[i].checked)
+            marcado = true;
+            }
+
+            if(!marcado) {
+            alert("please select profile");
+            return false;
+            }
+
+ 		    var cap = document.forms["reg-form"]["captcha1"].value;
+		    if (cap == "") {
+		    alert("please generate captcha");
+		    return false;
+		    }
+            var cap = document.forms["reg-form"]["captcha1"].value;
+		    var cap1 = document.forms["reg-form"]["captcha"].value;
+		    if (cap != cap1) {
+		    alert("Captcha incorrect. Please try again");
+		    return false;
+		    }
 
             return true;
         }
@@ -76,9 +123,14 @@
             <input type="radio" name="type" value="teacher">Teacher
             <input type="radio" name="type" value="student">Student
         </div>
-
-
-
+        
+         Captcha
+        </br>
+            <input type="text" id="captcha" name="captcha" readonly/>
+            <input type="button" value="Generate" onClick="generar_captcha()" />
+        </br>
+            <input type="text" id="captcha1" name="captcha1"/>
+        </div>
     </div>
 </div>
 #{/form}
